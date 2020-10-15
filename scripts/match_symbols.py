@@ -15,10 +15,10 @@ parser = argparse.ArgumentParser(
     prog="match_symbols.py",
     description="Match symbols from static lib with memory dump.",
 )
-parser.add_argument("haystack", metavar="HAYSTACK", type=str, help="Memdump to search")
+parser.add_argument("haystack", metavar="memdump", type=str, help="Memdump to search")
 parser.add_argument(
     "needles",
-    metavar="NEEDLE",
+    metavar="lib",
     type=str,
     nargs="+",
     help="Static libraries containing objects to find",
@@ -31,8 +31,8 @@ parser.add_argument(
 )
 parser.add_argument(
     "--haystack_size",
-    type=lambda x: int(x, 0),
-    default=0x88F400,
+    type=lambda x: int(x, 0) if x is not None else None,
+    default=None,
     help="Haystack max size",
 )
 parser.add_argument(
