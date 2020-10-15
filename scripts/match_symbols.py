@@ -23,9 +23,6 @@ parser.add_argument(
     nargs="+",
     help="Static libraries containing objects to find",
 )
-parser.add_argument(
-    "--min_match", type=int, default=24, help="Minimum match size (ignore smaller)"
-)
 parser.add_argument("--match", type=int, default=32, help="Bytes to match")
 parser.add_argument(
     "--haystack_base",
@@ -80,7 +77,6 @@ if len(haystack) > args.haystack_size:
 
 print(f"haystack_base = 0x{'%08x' % args.haystack_base}")
 print(f"len(haystack) = 0x{'%08x' % len(haystack)}")
-print(f"min_match = {args.min_match}")
 print(f"match = {args.match}")
 
 
@@ -94,8 +90,6 @@ def match_symbol_reloc(haystack, sym, text, strtab, relas_map):
     # Get section in .text referenced by symbol.
     func_value_ptr = sym["st_value"]
     func_value_size = sym["st_size"]
-    if func_value_size < args.min_match:
-        return
     sym_value = text[func_value_ptr : func_value_ptr + func_value_size]
     if len(sym_value) < func_value_size:
         print(f"[!] Malformed sym={sym_name}")
