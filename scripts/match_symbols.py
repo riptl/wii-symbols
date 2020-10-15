@@ -13,7 +13,7 @@ import subprocess
 
 parser = argparse.ArgumentParser(
     prog="match_symbols.py",
-    description="Find symbols from static lib in memory dump."
+    description="Match symbols from static lib with memory dump.",
 )
 parser.add_argument("haystack", metavar="HAYSTACK", type=str, help="Memdump to search")
 parser.add_argument(
@@ -22,12 +22,6 @@ parser.add_argument(
     type=str,
     nargs="+",
     help="Static libraries containing objects to find",
-)
-parser.add_argument(
-    "--no-reloc",
-    type=bool,
-    default=False,
-    help="Disable reloc support and do only exact matches",
 )
 parser.add_argument(
     "--min_match", type=int, default=24, help="Minimum match size (ignore smaller)"
@@ -44,6 +38,9 @@ parser.add_argument(
     type=lambda x: int(x, 0),
     default=0x88F400,
     help="Haystack max size",
+)
+parser.add_argument(
+    "-o", "--output", type=str, default=None, help="Append symbols to file"
 )
 args = parser.parse_args()
 
@@ -72,17 +69,11 @@ class RelocationMap(object):
         return self._items[i:j]
 
 
-def split_each(w, n):
-    for i in range(0, len(w), n):
-        yield w[i : i + n]
-
-
-def hexdump(buf):
-    return " ".join(split_each(buf.hex(), 8))
-
-
 with open(args.haystack, "rb") as f:
     haystack = f.read()
+
+if args.output is not None:
+    output_file = open(args.output, "a+")
 
 if len(haystack) > args.haystack_size:
     haystack = haystack[: args.haystack_size]
@@ -91,39 +82,6 @@ print(f"haystack_base = 0x{'%08x' % args.haystack_base}")
 print(f"len(haystack) = 0x{'%08x' % len(haystack)}")
 print(f"min_match = {args.min_match}")
 print(f"match = {args.match}")
-
-
-def match_symbol_static(haystack, sym, text, strtab):
-    sym_type = sym.entry["st_info"]["type"]
-    sym_name = strtab.get_string(sym["st_name"])
-    if len(sym_name) == 0:
-        return
-    if sym_type == "STT_FUNC":
-        # Get section in .text referenced by symbol.
-        func_value_ptr = sym["st_value"]
-        func_value_size = sym["st_size"]
-        if func_value_size < args.min_match:
-            return
-        sym_value = text[func_value_ptr : func_value_ptr + func_value_size]
-        # Formulate a regex string.
-        regex = b""
-        for i, mask_bit in enumerate(mask):
-            if mask_bit == 0:
-                regex += b"\\x%02x" % sym_value[i]
-            else:
-                regex += b"."
-        # Seach for symbol.
-        print(f"[~] Searching for {sym_name}")
-        needle = sym_value
-        if len(needle) > args.match:
-            needle = needle[: args.match]
-        haystack_idx = haystack.find(needle)
-        if haystack_idx > 0:
-            print(
-                f"[+] Match offset={'%08x' % (args.haystack_base + haystack_idx)} size={len(needle)} sym={sym_name}"
-            )
-        else:
-            print(f"[-] Unknown sym={sym_name}")
 
 
 def match_symbol_reloc(haystack, sym, text, strtab, relas_map):
@@ -159,9 +117,10 @@ def match_symbol_reloc(haystack, sym, text, strtab, relas_map):
     match = re.search(regex, haystack)
     if match is not None:
         haystack_pos = args.haystack_base + match.start()
-        print(
-            f"[+] Match offset={'%08x' % haystack_pos} size={func_value_size} sym={sym_name}"
-        )
+        match_str = f"pos={'%08x' % haystack_pos} len={func_value_size} sym={sym_name}"
+        print("[+] Match " + match_str)
+        if output_file is not None:
+            output_file.write(match_str + "\n")
     else:
         print(f"[-] Unknown sym={sym_name}")
 
@@ -174,15 +133,12 @@ def match_elf(haystack, elf):
     if text_section is None:
         return
     text = text_section.data()
-    if not args.no_reloc:
-        relas_iter = ()
-        if textrela is not None:
-            relas_iter = textrela.iter_relocations()
-        relas_map = RelocationMap(relas_iter)
-        for sym in symtab.iter_symbols():
-            match_symbol_reloc(haystack, sym, text, strtab, relas_map)
-    else:
-        match_symbol_static(haystack, sym, text, strtab)
+    relas_iter = ()
+    if textrela is not None:
+        relas_iter = textrela.iter_relocations()
+    relas_map = RelocationMap(relas_iter)
+    for sym in symtab.iter_symbols():
+        match_symbol_reloc(haystack, sym, text, strtab, relas_map)
 
 
 for needle_path in args.needles:
@@ -206,3 +162,6 @@ for needle_path in args.needles:
             print(f"[!] Malformed ELF: {needle_short}/{object_file}")
             continue
         match_elf(haystack, elf)
+
+
+output_file.close()  # TODO use "with" construction
