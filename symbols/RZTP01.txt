@@ -102,7 +102,6 @@ pos=80031b10 len=36 sym=__GXDefaultTlutRegionCallback
 pos=80031b40 len=368 sym=__GXShutdown
 pos=80031cb0 len=304 sym=__GXInitRevisionBits
 pos=80031de0 len=1284 sym=GXInit
-pos=800325cc len=4 sym=__opPC3Vec__Q34nw4r4math4VEC3CFv
 pos=80032d10 len=140 sym=GXInitFifoBase
 pos=80032da0 len=248 sym=CPGPLinkCheck
 pos=80032ea0 len=480 sym=GXSetCPUFifo
@@ -110,7 +109,6 @@ pos=80033080 len=656 sym=GXSetGPFifo
 pos=80033310 len=256 sym=__GXSaveFifo
 pos=80033420 len=76 sym=GXGetGPStatus
 pos=80033590 len=20 sym=GXGetFifoPtrs
-pos=800335a0 len=20 sym=IsValid__Q44nw4r3snd6detail9FrameHeapCFv
 pos=80033620 len=160 sym=GXEnableBreakPt
 pos=800336c0 len=72 sym=GXDisableBreakPt
 pos=80033710 len=124 sym=__GXFifoInit
@@ -503,6 +501,7 @@ pos=8004bc10 len=212 sym=ConfigMEM2_56MB
 pos=8004bcf0 len=168 sym=ConfigMEM2_64MB
 pos=8004bda0 len=212 sym=ConfigMEM2_112MB
 pos=8004be80 len=168 sym=ConfigMEM2_128MB
+pos=8004bf30 len=24 sym=RealMode
 pos=8004bf50 len=288 sym=BATConfig
 pos=8004c070 len=68 sym=__OSRestoreCodeExecOnMEM1
 pos=8004c1d0 len=220 sym=OSLockMutex
@@ -625,6 +624,7 @@ pos=80056880 len=280 sym=getTiming
 pos=800569a0 len=512 sym=__VIInit
 pos=80056ba0 len=1352 sym=VIInit
 pos=800570f0 len=84 sym=VIWaitForRetrace
+pos=80057150 len=680 sym=setFbbRegs
 pos=80057400 len=224 sym=setHorizontalRegs
 pos=800574e0 len=404 sym=setVerticalRegs
 pos=80057680 len=1740 sym=VIConfigure
@@ -846,7 +846,6 @@ pos=8006ff50 len=28 sym=bta_sys_sendmsg
 pos=8006ff6c len=32 sym=bta_sys_start_timer
 pos=8006ff8c len=20 sym=bta_sys_stop_timer
 pos=8006ffa0 len=104 sym=bta_sys_disable
-pos=8006ffbc len=8 sym=GetLifeStatus__Q34nw4r2ef16ReferencedObjectCFv
 pos=8007005c len=180 sym=ptim_timer_update
 pos=80070110 len=160 sym=ptim_start_timer
 pos=80070344 len=176 sym=bta_dm_disable
@@ -1329,6 +1328,7 @@ pos=80094200 len=140 sym=rfc_inc_credit
 pos=8009428c len=60 sym=rfc_dec_credit
 pos=800946a4 len=92 sym=SDP_ServiceSearchRequest
 pos=80094700 len=100 sym=SDP_ServiceSearchAttributeRequest
+pos=80094764 len=40 sym=SDP_FindAttributeInRec
 pos=8009478c len=204 sym=SDP_FindServiceInDb
 pos=80094858 len=264 sym=SDP_FindServiceUUIDInDb
 pos=80094cc0 len=1200 sym=SDP_GetLocalDiRecord
@@ -2030,7 +2030,6 @@ pos=800fdb00 len=12 sym=NAND_CreatePrfFileEx
 pos=800fdb10 len=804 sym=VFi_NandFlushNANDFromHandleIdx
 pos=800fde40 len=1704 sym=_MountPrfFile
 pos=800fe630 len=108 sym=nanddrv_mount
-pos=800fe684 len=4 sym=KeyUpEvent__Q34nw4r3mcs17InputEventHandlerFRCQ34nw4r3mcs11KeyEventArg
 pos=800fe760 len=252 sym=nanddrv_unmount
 pos=800fe970 len=416 sym=nanddrv_physical_read
 pos=8010c9c0 len=100 sym=Skip__Q44nw4r2ut10FileStream12FilePositionFl
@@ -2072,6 +2071,7 @@ pos=8010e9a0 len=188 sym=SetAlternateChar__Q44nw4r2ut6detail11ResFontBaseFUs
 pos=8010eac0 len=276 sym=GetCharWidths__Q44nw4r2ut6detail11ResFontBaseCFUs
 pos=8010ebe0 len=196 sym=GetGlyph__Q44nw4r2ut6detail11ResFontBaseCFPQ34nw4r2ut5GlyphUs
 pos=8010ecb0 len=188 sym=HasGlyph__Q44nw4r2ut6detail11ResFontBaseCFUs
+pos=8010ee50 len=264 sym=GetGlyphFromIndex__Q44nw4r2ut6detail11ResFontBaseCFPQ34nw4r2ut5GlyphUs
 pos=8010f000 len=328 sym=SetResource__Q34nw4r2ut7ResFontFPv
 pos=8010f2a0 len=896 sym=__ct__Q34nw4r2ut10CharWriterFv
 pos=8010f660 len=2352 sym=SetupGX__Q34nw4r2ut10CharWriterFv
@@ -2411,6 +2411,7 @@ pos=80148350 len=136 sym=LoadHeader__Q34nw4r3snd15DvdSoundArchiveFPvUl
 pos=801483e0 len=136 sym=LoadLabelStringData__Q34nw4r3snd15DvdSoundArchiveFPvUl
 pos=80148470 len=44 sym=Read__Q44nw4r3snd15DvdSoundArchive13DvdFileStreamFPvUl
 pos=801484a0 len=128 sym=Seek__Q44nw4r3snd15DvdSoundArchive13DvdFileStreamFlUl
+pos=80148520 len=8 sym=GetSize__Q44nw4r3snd15DvdSoundArchive13DvdFileStreamCFv
 pos=80148530 len=16 sym=Tell__Q44nw4r3snd15DvdSoundArchive13DvdFileStreamCFv
 pos=80148610 len=64 sym=Init__Q44nw4r3snd6detail12EnvGeneratorFf
 pos=80148650 len=24 sym=Reset__Q44nw4r3snd6detail12EnvGeneratorFf
@@ -2496,6 +2497,7 @@ pos=8014ebb0 len=176 sym=LoadHeader__Q34nw4r3snd16NandSoundArchiveFPvUl
 pos=8014ec60 len=176 sym=LoadLabelStringData__Q34nw4r3snd16NandSoundArchiveFPvUl
 pos=8014ed10 len=132 sym=Read__Q44nw4r3snd16NandSoundArchive14NandFileStreamFPvUl
 pos=8014eda0 len=128 sym=Seek__Q44nw4r3snd16NandSoundArchive14NandFileStreamFlUl
+pos=8014ee20 len=8 sym=GetSize__Q44nw4r3snd16NandSoundArchive14NandFileStreamCFv
 pos=8014ee30 len=16 sym=Tell__Q44nw4r3snd16NandSoundArchive14NandFileStreamCFv
 pos=8014ee90 len=196 sym=__dt__Q44nw4r3snd6detail10PlayerHeapFv
 pos=8014ef60 len=48 sym=Create__Q44nw4r3snd6detail10PlayerHeapFPvUl
@@ -2595,6 +2597,7 @@ pos=80154cd0 len=28 sym=SetupSound__Q34nw4r3snd10SoundActorFPQ34nw4r3snd11SoundH
 pos=80154cf0 len=28 sym=detail_SetupSoundWithAmbientInfo__Q34nw4r3snd10SoundActorFPQ34nw4r3snd11SoundHandleUlPCQ44nw4r3snd14SoundStartable9StartInfoPQ54nw4r3snd6detail10BasicSound11AmbientInfoPv
 pos=80154d10 len=56 sym=detail_SetupSound__Q34nw4r3snd10SoundActorFPQ34nw4r3snd11SoundHandleUlbPCQ44nw4r3snd14SoundStartable9StartInfo
 pos=80154d50 len=20 sym=detail_ConvertLabelStringToSoundId__Q34nw4r3snd10SoundActorFPCc
+pos=80154df0 len=20 sym=IsAvailable__Q34nw4r3snd12SoundArchiveCFv
 pos=80154e20 len=24 sym=Shutdown__Q34nw4r3snd12SoundArchiveFv
 pos=80154e70 len=16 sym=ConvertLabelStringToSoundId__Q34nw4r3snd12SoundArchiveCFPCc
 pos=80154e80 len=16 sym=ConvertLabelStringToGroupId__Q34nw4r3snd12SoundArchiveCFPCc
@@ -2778,7 +2781,6 @@ pos=801628c0 len=448 sym=AllocVoice__Q44nw4r3snd6detail12VoiceManagerFiiiPFPQ44n
 pos=80162a80 len=152 sym=FreeVoice__Q44nw4r3snd6detail12VoiceManagerFPQ44nw4r3snd6detail5Voice
 pos=80162b20 len=176 sym=UpdateAllVoices__Q44nw4r3snd6detail12VoiceManagerFv
 pos=80162bd0 len=104 sym=NotifyVoiceUpdate__Q44nw4r3snd6detail12VoiceManagerFv
-pos=80162bf4 len=12 sym=Draw_ModifyScaleX__Q34nw4r2ef15ParticleManagerFPQ34nw4r2ef8Particlef
 pos=80162c40 len=264 sym=ChangeVoicePriority__Q44nw4r3snd6detail12VoiceManagerFPQ44nw4r3snd6detail5Voice
 pos=80162d50 len=116 sym=UpdateAllVoicesSync__Q44nw4r3snd6detail12VoiceManagerFUl
 pos=80162f80 len=88 sym=CalcVolumeRatio__Q44nw4r3snd6detail4UtilFf
@@ -3415,7 +3417,6 @@ pos=801a2a70 len=236 sym=SetSize__Q44nw4r3lyt6detail11TexCoordAryFUc
 pos=801a2e60 len=1376 sym=DrawQuad__Q34nw4r3lyt6detailFRCQ34nw4r4math4VEC2RCQ34nw4r3lyt4SizeUcPA4_CQ34nw4r4math4VEC2PCQ34nw4r2ut5Color
 pos=801a6698 len=44 sym=PMEnd
 pos=801bf55c len=12 sym=WPADiIsDummyExtension
-pos=801c04e0 len=8 sym=ConvertOffsToPtr<Q34nw4r3lyt8TevStage>__Q34nw4r3lyt6detailFPCvUi_PCQ34nw4r3lyt8TevStage
 pos=801ceac8 len=12 sym=teardown_callback
 pos=80209e5c len=24 sym=PSVECSquareMag
 pos=80209e74 len=8 sym=fabs
@@ -3424,28 +3425,25 @@ pos=80219144 len=16 sym=Min<f>__Q34nw4r2ut31@unnamed@ut_TextWriterBase_cpp@Fff_f
 pos=80220334 len=12 sym=WBT_CreateCommandSYNC
 pos=8022c21c len=12 sym=DWCi_NodeInfoList_GetCount
 pos=8022c220 len=8 sym=GetFont__Q34nw4r2dw8GraphicsCFv
+pos=8023c584 len=68 sym=SetColorMapping__Q36nw4hbm2ut10CharWriterFQ36nw4hbm2ut5ColorQ36nw4hbm2ut5Color
 pos=80241b48 len=48 sym=WPADGetAcceptConnection
 pos=8024ae1c len=20 sym=DWCi_GetGT2ConnectionByIdx
-pos=80253f40 len=12 sym=__ct__Q34nw4r3g3d37ResCommon<Q34nw4r3g3d13ResVtxPosData>FRCQ34nw4r3g3d37ResCommon<Q34nw4r3g3d13ResVtxPosData>
 pos=8025ee10 len=8 sym=CanWrite__Q34nw4r3mcs13McsFileStreamCFv
 pos=8026bb78 len=8 sym=SetTitleTagProcessor__Q34nw4r2dw6WindowFPQ34nw4r2ut19TagProcessorBase<c>
 pos=80277a44 len=68 sym=UpdateReadWritePoint___Q44nw4r3mcs6detail14Hio2RingBufferFv
+pos=802926ac len=8 sym=IsUserAllocated__Q36nw4hbm3lyt5GroupCFv
 pos=802978b0 len=8 sym=FNTGetEncoding
-pos=802a948c len=8 sym=__ct__Q44nw4r3snd6detail16FileStreamHandleFPQ34nw4r2ut10FileStream
 pos=802b8478 len=12 sym=EmitFlag_SetAll__Q34nw4r2ef15ResEmitterParamFUs
 pos=802c1e2c len=8 sym=SetPitch__Q44nw4r3snd6detail8SeqTrackFf
 pos=80348a34 len=12 sym=Flag_GetAll__Q34nw4r2ef12ResDrawParamCFv
 pos=803807a4 len=24 sym=__ct__Q34nw4r2ut4RectFv
 pos=803c7e4c len=8 sym=setFadeColorEnable__Q310homebutton10HomeButton10BlackFaderFb
 pos=8044b93c len=16 sym=__DVDLowBreak
-pos=80481b3c len=4 sym=__ct__Q44nw4r2ut27@unnamed@snd_AxManager_cpp@11NonCopyableFv
 pos=804c881c len=12 sym=DWC_GetConnectNumLanMatch
-pos=804c8834 len=8 sym=GetVoiceOutCount__Q44nw4r3snd6detail9WsdPlayerCFv
 pos=804e7528 len=8 sym=isRumbling__Q210homebutton10ControllerFv
 pos=804fbc7c len=12 sym=SetName__Q36nw4hbm3lyt8MaterialFPCc
 pos=80527974 len=8 sym=getReassignedFlag__Q210homebutton10HomeButtonCFv
 pos=80583c04 len=12 sym=Init__Q36nw4hbm3lyt5GroupFv
+pos=805c7df4 len=12 sym=Invalidate__Q54nw4r3g3d8G3DState23@unnamed@g3d_state_cpp@8TexStateFv
 pos=805f2c70 len=12 sym=restart__Q210homebutton15FrameControllerFv
-pos=8060ff20 len=8 sym=GetTriggerRight__Q34nw4r2dw5GcPadCFv
-pos=8063408c len=8 sym=GetWsdDataAddress__Q44nw4r3snd6detail9WsdPlayerCFv
 pos=806390dc len=16 sym=DEMOWinOpenWindow
