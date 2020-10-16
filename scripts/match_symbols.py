@@ -22,7 +22,7 @@ parser.add_argument(
     metavar="lib",
     type=str,
     nargs="+",
-    help="Static libraries containing objects to find",
+    help="Static libs and object files containing objects to find",
 )
 parser.add_argument(
     "--haystack_base",
@@ -71,6 +71,8 @@ with open(args.haystack, "rb") as f:
 
 if args.output is not None:
     output_file = open(args.output, "a+")
+else:
+    output_file = None
 
 if args.haystack_size is not None and len(haystack) > args.haystack_size:
     haystack = haystack[: args.haystack_size]
@@ -79,15 +81,19 @@ print(f"haystack_base = 0x{'%08x' % args.haystack_base}")
 print(f"len(haystack) = 0x{'%08x' % len(haystack)}")
 
 
-def match_symbol_reloc(haystack, sym, text, strtab, relas_map):
+def match_symbol_reloc(haystack, sym, text, strtab, relas_map, text_shndx, text_offset):
     sym_type = sym.entry["st_info"]["type"]
     sym_name = strtab.get_string(sym["st_name"])
     if len(sym_name) == 0:
         return
     if sym_type != "STT_FUNC":
         return
+    if sym["st_shndx"] != text_shndx:
+        return
     # Get section in .text referenced by symbol.
     func_value_ptr = sym["st_value"]
+    if func_value_ptr > text_offset:
+        func_value_ptr -= text_offset
     func_value_size = sym["st_size"]
     sym_value = text[func_value_ptr : func_value_ptr + func_value_size]
     if len(sym_value) < func_value_size:
@@ -128,7 +134,14 @@ def match_elf(haystack, elf):
     symtab = elf.get_section_by_name(".symtab")  # Symbol table
     strtab = elf.get_section_by_name(".strtab")  # String table
     textrela = elf.get_section_by_name(".rela.text")  # Relocation table
-    text_section = elf.get_section_by_name(".text")  # Text section
+    # Find text section
+    text_section = None
+    for i, section in enumerate(elf.iter_sections()):
+        if section.name == ".text":
+            text_section_idx = i
+            text_section = section
+            text_section_offset = section.header["sh_addr"]
+            break
     if text_section is None:
         return
     text = text_section.data()
@@ -137,30 +150,54 @@ def match_elf(haystack, elf):
         relas_iter = textrela.iter_relocations()
     relas_map = RelocationMap(relas_iter)
     for sym in symtab.iter_symbols():
-        match_symbol_reloc(haystack, sym, text, strtab, relas_map)
+        match_symbol_reloc(
+            haystack,
+            sym,
+            text,
+            strtab,
+            relas_map,
+            text_section_idx,
+            text_section_offset,
+        )
 
 
-for needle_path in args.needles:
-    needle_short = Path(needle_path).name
-    print(f"[~] Opening {needle_short}")
+def match_static_lib(path):
+    file_name = Path(needle_path).name
     # List the files in the (ar)chive.
-    ar_table = subprocess.run(["ar", "t", needle_path], capture_output=True, check=True)
+    ar_table = subprocess.run(["ar", "t", path], capture_output=True, check=True)
     ar_table_stdout = ar_table.stdout.decode("utf-8")
     object_files = ar_table_stdout.split()
     # Open each file (might not scale well, but whatever).
     for object_file in object_files:
-        print(f"[~] Crawling {needle_short}/{object_file}")
+        print(f"[~] Crawling {file_name}/{object_file}")
         # Extract and parse ELF
         elf_buf_call = subprocess.run(
-            ["ar", "p", needle_path, object_file], capture_output=True, check=True
+            ["ar", "p", path, object_file], capture_output=True, check=True
         )
         elf_buf = elf_buf_call.stdout
         try:
             elf = ELFFile(BytesIO(elf_buf))
         except ELFError:
-            print(f"[!] Malformed ELF: {needle_short}/{object_file}")
+            print(f"[!] Malformed ELF: {file_name}/{object_file}")
             continue
         match_elf(haystack, elf)
 
 
-output_file.close()  # TODO use "with" construction
+for needle_path in args.needles:
+    object_path = Path(needle_path)
+    needle_short = object_path.name
+    print(f"[~] Opening {needle_short}")
+    if object_path.suffix == ".a":
+        match_static_lib(needle_path)
+    elif object_path.suffix == ".elf" or object_path.suffix == ".o":
+        with open(object_path, "rb") as f:
+            try:
+                elf = ELFFile(f)
+            except ELFError:
+                print(f"[!] Malformed ELF: {object_path}")
+                continue
+            match_elf(haystack, elf)
+
+
+if output_file is not None:
+    output_file.close()  # TODO use "with" construction
