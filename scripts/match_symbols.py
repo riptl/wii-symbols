@@ -3,6 +3,7 @@
 import argparse
 from bisect import bisect_left, bisect_right
 from io import BytesIO
+import itertools
 import re
 from pathlib import Path
 from elftools.common.exceptions import ELFError
@@ -106,7 +107,9 @@ def match_symbol_reloc(haystack, sym, text, strtab, relas_map):
         else:
             regex += b"."
     # Seach for symbol.
-    matches = list(re.finditer(regex, haystack))
+    matches_iter = re.finditer(regex, haystack)
+    matches_iter = itertools.islice(matches_iter, 16)
+    matches = list(matches_iter)
     if len(matches) <= 0:
         print(f"[-] Unknown sym={sym_name}")
         return
