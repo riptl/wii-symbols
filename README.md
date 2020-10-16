@@ -17,7 +17,7 @@ Debug symbols for Wii games.
 |[RMKP01](./symbols/RMKP01.txt)|        3304|Mario Sports Mix                               |
 |[RSBP01](./symbols/RSBP01.txt)|        3453|Super Smash Bros. Brawl                        |
 |[RSPE01](./symbols/RSPE01.txt)|        2312|Wii Sports                                     |
-|[RZTP01](./symbols/RZTP01.txt)|        3451|Wii Sports Resort                              |
+|[RZTP01](./symbols/RZTP01.txt)|        3449|Wii Sports Resort                              |
 |[SB4P01](./symbols/SB4P01.txt)|        2325|Super Mario Galaxy 2                           |
 |[SC8P01](./symbols/SC8P01.txt)|        3229|Wii Play: Motion                               |
 |[SIIP8P](./symbols/SIIP8P.txt)|        2641|Mario & Sonic at the London 2012 Olympic Games |
