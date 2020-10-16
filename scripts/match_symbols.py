@@ -115,9 +115,7 @@ def match_symbol_reloc(haystack, sym, text, strtab, relas_map):
         return
     for match in matches:
         haystack_pos = args.haystack_base + match.start()
-        match_str = (
-            f"pos={'%08x' % haystack_pos} len={func_value_size} sym={sym_name}"
-        )
+        match_str = f"pos={'%08x' % haystack_pos} len={func_value_size} sym={sym_name}"
         print("[+] Match " + match_str)
         if output_file is not None:
             output_file.write(match_str + "\n")
