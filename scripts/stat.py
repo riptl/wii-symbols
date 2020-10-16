@@ -12,7 +12,10 @@ parser.add_argument(
     "tables", metavar="TABLE", type=str, nargs="+", help="File name of symbol table"
 )
 parser.add_argument(
-    "--wiitdb", type=str, required=True, help="Game table from https://www.gametdb.com/wiitdb.txt"
+    "--wiitdb",
+    type=str,
+    required=True,
+    help="Game table from https://www.gametdb.com/wiitdb.txt",
 )
 args = parser.parse_args()
 
@@ -38,7 +41,6 @@ for table_path in args.tables:
 
 # Render table
 writer = MarkdownTableWriter(
-    headers=["Game ID", "Symbol Count", "Name"],
-    value_matrix=table,
+    headers=["Game ID", "Symbol Count", "Name"], value_matrix=table,
 )
 writer.write_table()
