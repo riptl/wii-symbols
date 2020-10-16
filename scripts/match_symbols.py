@@ -71,7 +71,7 @@ with open(args.haystack, "rb") as f:
 if args.output is not None:
     output_file = open(args.output, "a+")
 
-if len(haystack) > args.haystack_size:
+if args.haystack_size is not None and len(haystack) > args.haystack_size:
     haystack = haystack[: args.haystack_size]
 
 print(f"haystack_base = 0x{'%08x' % args.haystack_base}")
@@ -106,15 +106,21 @@ def match_symbol_reloc(haystack, sym, text, strtab, relas_map):
         else:
             regex += b"."
     # Seach for symbol.
-    match = re.search(regex, haystack)
-    if match is not None:
+    matches = list(re.finditer(regex, haystack))
+    if len(matches) <= 0:
+        print(f"[-] Unknown sym={sym_name}")
+        return
+    if len(matches) >= 16:
+        print(f"[-] Vague sym={sym_name}")
+        return
+    for match in matches:
         haystack_pos = args.haystack_base + match.start()
-        match_str = f"pos={'%08x' % haystack_pos} len={func_value_size} sym={sym_name}"
+        match_str = (
+            f"pos={'%08x' % haystack_pos} len={func_value_size} sym={sym_name}"
+        )
         print("[+] Match " + match_str)
         if output_file is not None:
             output_file.write(match_str + "\n")
-    else:
-        print(f"[-] Unknown sym={sym_name}")
 
 
 def match_elf(haystack, elf):
