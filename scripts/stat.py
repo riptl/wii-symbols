@@ -33,7 +33,8 @@ for table_path in args.tables:
     with open(table_path) as f:
         num_lines = sum(1 for line in f)
     name = wiitdb[game_id]
-    table.append([game_id, num_lines, name])
+    link = f"[{game_id}](./symbols/{game_id}.txt)"
+    table.append([link, num_lines, name])
 
 # Render table
 writer = MarkdownTableWriter(
