@@ -7,7 +7,7 @@ Debug symbols for Wii games.
 |[R8PE01](./symbols/R8PE01.txt)|        1493|Super Paper Mario                              |
 |[R8PK01](./symbols/R8PK01.txt)|        2350|Super Paper Mario                              |
 |[R8PP01](./symbols/R8PP01.txt)|        1573|Super Paper Mario                              |
-|[RCAP78](./symbols/RCAP78.txt)|        1373|Cars                                           |
+|[RCAP78](./symbols/RCAP78.txt)|       12969|Cars                                           |
 |[RHAP01](./symbols/RHAP01.txt)|        1930|Wii Play                                       |
 |[RM4P41](./symbols/RM4P41.txt)|        1366|Monster 4x4: World Circuit                     |
 |[RMCE01](./symbols/RMCE01.txt)|        4237|Mario Kart Wii                                 |
