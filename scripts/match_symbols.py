@@ -102,17 +102,17 @@ def match_symbol_reloc(haystack, sym, text, strtab, relas_map, text_shndx, text_
     # Create a mask of static vs fuzzy bytes, based on relocatable entries.
     mask = [0] * func_value_size
     for rela in relas_map.slice_range(sym["st_value"], func_value_size):
-        rt = rela['r_info_type']
+        rt = rela["r_info_type"]
         ro = rela["r_offset"] - func_value_ptr
-        if rt == 4: # R_PPC_ADDR16_LO
+        if rt == 4:  # R_PPC_ADDR16_LO
             mask[ro + 2 : ro + 4] = [1, 1]
-        elif rt == 5: # R_PPC_ADDR16_HI
+        elif rt == 5:  # R_PPC_ADDR16_HI
             mask[ro : ro + 2] = [1, 1]
-        elif rt == 6: # R_PPC_ADDR16_HA # TODO what half does it affect
+        elif rt == 6:  # R_PPC_ADDR16_HA # TODO what half does it affect
             mask[ro : ro + 4] = [1, 1, 1, 1]
-        elif rt == 10: # R_PPC_REL24
+        elif rt == 10:  # R_PPC_REL24
             mask[ro + 1 : ro + 4] = [1, 1, 1]
-        elif rt == 109: # R_PPC_EMB_SDA21
+        elif rt == 109:  # R_PPC_EMB_SDA21
             mask[ro + 1 : ro + 4] = [1, 1, 1]
         else:
             print(f"[!] Unknown relocation_type={rt}")
